@@ -21,18 +21,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.takePhotoButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.systemCameraTakePhotoButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Log.d(TAG, "Environment.getExternalStorageDirectory(): " + Environment.getExternalStorageDirectory());
                 File directory = new File(Environment.getExternalStorageDirectory() + "/CameraDemo");
                 if (!directory.exists())
-                    Log.d(TAG, "directory.mkdir(): " + directory.mkdir());
+                    directory.mkdir();
                 File file = new File(directory + "/IMG" + System.currentTimeMillis() + ".jpg");
+                Log.d(TAG, "file: " + file);
                 uri = Uri.fromFile(file);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);  //将拍摄到的图片存储到uri所指示的路径，此操作会将onActivityResult中的data置为null
                 startActivityForResult(intent, REQUEST_CODE_OPEN_CAMERA);
+            }
+        });
+        findViewById(R.id.customizedCameraTakePhotoButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

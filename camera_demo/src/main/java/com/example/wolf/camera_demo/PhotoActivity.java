@@ -26,6 +26,7 @@ public class PhotoActivity extends AppCompatActivity {
             Uri uri = getIntent().getParcelableExtra(EXTRA_PHOTO_URI);
             Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
             photoImageView.setImageBitmap(bitmap);
+            Log.d(TAG, "bitmap.getAllocationByteCount(): " + bitmap.getAllocationByteCount());
         } catch (FileNotFoundException ex) {
             Log.e(TAG, null, ex);
         }

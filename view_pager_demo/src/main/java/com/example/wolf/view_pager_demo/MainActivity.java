@@ -1,6 +1,6 @@
 package com.example.wolf.view_pager_demo;
 
-import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StatusBarColorSetter.setStatusBarColor(this, getResources().getColor(R.color.colorTitleBar));
+        StatusBarColorSetter.setStatusBarColor(this, Color.RED);
         dakongyiTextView = findViewById(R.id.dakongyiTextView);
         rixiangTextView = findViewById(R.id.rixiangTextView);
         ruolinTextView = findViewById(R.id.ruolinTextView);
@@ -68,10 +68,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchTab(int item) {
-        Resources resources = getResources();
-        int selectedColor = resources.getColor(R.color.colorUnderlineSelected);
-        int underlineUnselectedColor = resources.getColor(R.color.colorUnderlineUnselected);
-        int textUnselectedColor = resources.getColor(R.color.black);
+        int selectedColor = Color.BLUE;
+        int underlineUnselectedColor = Color.WHITE;
+        int textUnselectedColor = Color.BLACK;
         switch (item) {
             case ITEM_DA_KONG_YI:
                 dakongyiTextView.setTextColor(selectedColor);

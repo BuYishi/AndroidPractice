@@ -7,4 +7,4 @@
 &emsp;&emsp;2.自定义相机
 ## view\_pager_demo ##
 &emsp;&emsp;ViewPager演示<br />
-&emsp;&emsp;1.横屏fragment布局演示
+&emsp;&emsp;1.横屏activity布局演示

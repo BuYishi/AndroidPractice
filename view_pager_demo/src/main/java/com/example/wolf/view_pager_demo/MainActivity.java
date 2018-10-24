@@ -1,4 +1,4 @@
-package com.example.wolf.androidpractice;
+package com.example.wolf.view_pager_demo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

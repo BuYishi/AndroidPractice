@@ -8,7 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -154,7 +156,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         textView = findViewById(R.id.textView);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(EyeKeyService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(EyeKeyService.BASE_URL).addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient).build();
         eyeKeyService = retrofit.create(EyeKeyService.class);
     }
 }

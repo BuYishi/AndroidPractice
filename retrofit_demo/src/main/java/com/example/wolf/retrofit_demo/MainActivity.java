@@ -1,5 +1,7 @@
 package com.example.wolf.retrofit_demo;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -30,13 +35,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.synchronousPostTestButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String imageUrl = "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=321851cefc246b607b0eb572d3c37d71/9345d688d43f879428d347b3d81b0ef41bd53a7a.jpg";
+                final Call<FaceDetectionResponse> call = eyeKeyService.detectFace(APP_ID, APP_KEY, imageUrl);
+                final ProgressDialog dialog = showProgressDialog(call);
                 new Thread() {
                     @Override
                     public void run() {
                         super.run();
                         try {
-                            String imageUrl = "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=321851cefc246b607b0eb572d3c37d71/9345d688d43f879428d347b3d81b0ef41bd53a7a.jpg";
-                            FaceDetectionResponse faceDetectionResponse = eyeKeyService.detectFace(APP_ID, APP_KEY, imageUrl).execute().body();
+                            FaceDetectionResponse faceDetectionResponse = call.execute().body();
                             final String responseCode = faceDetectionResponse.getRes_code();
                             final int width = faceDetectionResponse.getImg_width(), height = faceDetectionResponse.getImg_height();
                             final FaceDetectionResponse.Face face = faceDetectionResponse.getFaces().get(0);
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    dialog.dismiss();
                                     textView.setText("Synchronous Post Test:");
                                     textView.append("\n回应码：" + responseCode);
                                     textView.append("\n图像宽度：" + width);
@@ -55,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
                                     textView.append("\n年龄：" + attribute.getAge());
                                 }
                             });
-                        } catch (IOException ex) {
+                        } catch (final IOException ex) {
                             Log.e(TAG, "ex: " + ex);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(MainActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
+                                    reportException(ex, dialog);
                                 }
                             });
                         }
@@ -72,9 +80,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String imageUrl = "http://vpic.video.qq.com/96487261/p0331w01oiv_ori_3.jpg";
-                eyeKeyService.detectFace(APP_ID, APP_KEY, imageUrl).enqueue(new Callback<FaceDetectionResponse>() {
+                Call<FaceDetectionResponse> call = eyeKeyService.detectFace(APP_ID, APP_KEY, imageUrl);
+                final ProgressDialog dialog = showProgressDialog(call);
+                call.enqueue(new Callback<FaceDetectionResponse>() {
                     @Override
                     public void onResponse(Call<FaceDetectionResponse> call, Response<FaceDetectionResponse> response) {
+                        dialog.dismiss();
                         FaceDetectionResponse faceDetectionResponse = response.body();
                         String responseCode = faceDetectionResponse.getRes_code();
                         int width = faceDetectionResponse.getImg_width(), height = faceDetectionResponse.getImg_height();
@@ -94,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<FaceDetectionResponse> call, Throwable t) {
                         Log.e(TAG, "t: " + t);
-                        Toast.makeText(MainActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
+                        reportException(t, dialog);
                     }
                 });
             }
@@ -102,29 +113,32 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.synchronousGetTestButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String faceId1 = "bc7d6c540db344df903e3a3e2cad88ba", faceId2 = "4038c634aadb4905b4798fee98eb5fb3";
+                final Call<FaceComparisonResponse> call = eyeKeyService.compareFaces(APP_ID, APP_KEY, faceId1, faceId2);
+                final ProgressDialog dialog = showProgressDialog(call);
                 new Thread() {
                     @Override
                     public void run() {
                         super.run();
-                        String faceId1 = "bc7d6c540db344df903e3a3e2cad88ba", faceId2 = "4038c634aadb4905b4798fee98eb5fb3";
                         try {
-                            FaceComparisonResponse faceComparisonResponse = eyeKeyService.compareFaces(APP_ID, APP_KEY, faceId1, faceId2).execute().body();
+                            FaceComparisonResponse faceComparisonResponse = call.execute().body();
                             final String responseCode = faceComparisonResponse.getRes_code();
                             final float similarity = faceComparisonResponse.getSimilarity();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    dialog.dismiss();
                                     textView.setText("Synchronous Get Test:");
                                     textView.append("\n回应码：" + responseCode);
                                     textView.append("\n相似度：" + similarity);
                                 }
                             });
-                        } catch (IOException ex) {
+                        } catch (final IOException ex) {
                             Log.e(TAG, "ex: " + ex);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(MainActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
+                                    reportException(ex, dialog);
                                 }
                             });
                         }
@@ -136,9 +150,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String faceId1 = "bc7d6c540db344df903e3a3e2cad88ba", faceId2 = "4038c634aadb4905b4798fee98eb5fb3";
-                eyeKeyService.compareFaces(APP_ID, APP_KEY, faceId1, faceId2).enqueue(new Callback<FaceComparisonResponse>() {
+                Call<FaceComparisonResponse> call = eyeKeyService.compareFaces(APP_ID, APP_KEY, faceId1, faceId2);
+                final ProgressDialog dialog = showProgressDialog(call);
+                call.enqueue(new Callback<FaceComparisonResponse>() {
                     @Override
                     public void onResponse(Call<FaceComparisonResponse> call, Response<FaceComparisonResponse> response) {
+                        dialog.dismiss();
                         FaceComparisonResponse faceComparisonResponse = response.body();
                         String responseCode = faceComparisonResponse.getRes_code();
                         float similarity = faceComparisonResponse.getSimilarity();
@@ -150,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<FaceComparisonResponse> call, Throwable t) {
                         Log.e(TAG, "t: " + t);
-                        Toast.makeText(MainActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
+                        reportException(t, dialog);
                     }
                 });
             }
@@ -163,5 +180,35 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(EyeKeyService.BASE_URL).addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient).build();
         eyeKeyService = retrofit.create(EyeKeyService.class);
+    }
+
+    private ProgressDialog showProgressDialog(final Call call) {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("正在加载");
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.d(TAG, "onCancel(DialogInterface) called");
+                call.cancel();
+            }
+        });
+        dialog.show();
+        return dialog;
+    }
+
+    private void reportException(Throwable t, ProgressDialog dialog) {
+        if (t instanceof SocketTimeoutException) {
+            dialog.dismiss();
+            Toast.makeText(MainActivity.this, "请求超时，请检查网络", Toast.LENGTH_SHORT).show();
+        } else if (t instanceof SocketException) {
+            Toast.makeText(MainActivity.this, "已取消", Toast.LENGTH_SHORT).show();
+        } else if (t instanceof UnknownHostException)
+            Toast.makeText(MainActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
     }
 }

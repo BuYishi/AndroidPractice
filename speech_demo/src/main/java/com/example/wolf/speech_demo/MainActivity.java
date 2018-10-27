@@ -1,0 +1,41 @@
+package com.example.wolf.speech_demo;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    private EditText textToSpeakEditText;
+    private BaiduSpeechSynthesizer baiduSpeechSynthesizer;
+    private static final String TAG = MainActivity.class.getName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        findViewById(R.id.speakButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (baiduSpeechSynthesizer == null) {
+                    Toast.makeText(MainActivity.this, "未初始化语音模块", Toast.LENGTH_SHORT).show();
+                } else {
+                    String text = textToSpeakEditText.getText().toString();
+                    if (text.isEmpty())
+                        text = "百度语音演示";
+                    int errorCode = baiduSpeechSynthesizer.speak(text);
+                    Log.d(TAG, "errorCode: " + errorCode);
+                }
+            }
+        });
+        textToSpeakEditText = findViewById(R.id.textToSpeakEditText);
+        try {
+            baiduSpeechSynthesizer = BaiduSpeechSynthesizer.getInstance(this);
+        } catch (BaiduSpeechSynthesizer.InitializationException ex) {
+            Log.e(TAG, "Error code: " + ex.getErrorCode(), ex);
+            Toast.makeText(this, "语音模块初始化异常，错误码：" + ex.getErrorCode(), Toast.LENGTH_SHORT).show();
+        }
+    }
+}

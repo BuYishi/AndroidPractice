@@ -58,6 +58,7 @@ public class BaiduSpeechSynthesizer {
     }
 
     public int release() {
+        instance = null;
         return speechSynthesizer.release();
     }
 

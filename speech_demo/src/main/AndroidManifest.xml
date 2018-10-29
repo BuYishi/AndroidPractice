@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.wolf.speech_demo">
 
+    <uses-permission android:name="android.permission.INTERNET" />  <!--需联网初始化认证语音模块-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />  <!--必要的，否则会引起应用崩溃-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,10 +14,8 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

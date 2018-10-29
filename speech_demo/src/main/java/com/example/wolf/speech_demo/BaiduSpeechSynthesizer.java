@@ -14,6 +14,7 @@ import java.io.InputStream;
 
 public class BaiduSpeechSynthesizer {
     private SpeechSynthesizer speechSynthesizer;
+    private boolean initialized;
     public static BaiduSpeechSynthesizer instance;
     private static final int ERROR_CODE_SUCCESS = 0;
     private static final String APP_ID = "14580936";
@@ -21,9 +22,12 @@ public class BaiduSpeechSynthesizer {
     private static final String SECRET_KEY = "UiWU6kwgPpNaqMsI1wpBQlTA6DtUGxHf";
     private static final String TAG = BaiduSpeechSynthesizer.class.getName();
 
-    private BaiduSpeechSynthesizer(Context context) throws InitializationException {
+    private BaiduSpeechSynthesizer() {
         speechSynthesizer = SpeechSynthesizer.getInstance();
-        speechSynthesizer.setContext(context.getApplicationContext());
+    }
+
+    public void initialize(Context context) throws InitializationException {
+        speechSynthesizer.setContext(context);
         speechSynthesizer.setAppId(APP_ID);
         speechSynthesizer.setApiKey(API_KEY, SECRET_KEY);
         File ttsDir = new File(context.getFilesDir() + "/BaiduTTS");
@@ -42,10 +46,11 @@ public class BaiduSpeechSynthesizer {
         int errorCode = speechSynthesizer.initTts(TtsMode.MIX);
         if (errorCode != ERROR_CODE_SUCCESS)
             throw new InitializationException("Cannot initialize TTS", errorCode);
+        initialized = true;
     }
 
-    public void initialize() {
-        //start here
+    public boolean isInitialized() {
+        return initialized;
     }
 
     public int speak(String text) {
@@ -56,9 +61,9 @@ public class BaiduSpeechSynthesizer {
         return speechSynthesizer.release();
     }
 
-    public static BaiduSpeechSynthesizer getInstance(Context context) throws InitializationException {
+    public static BaiduSpeechSynthesizer getInstance() {
         if (instance == null)
-            instance = new BaiduSpeechSynthesizer(context);
+            instance = new BaiduSpeechSynthesizer();
         return instance;
     }
 

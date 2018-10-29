@@ -4,6 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RadioGroup
+        android:id="@+id/voiceTypeRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/maleVoiceRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="男声" />
+
+        <RadioButton
+            android:id="@+id/femaleVoiceRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="女声" />
+
+        <RadioButton
+            android:id="@+id/duXiaoyaoRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="度逍遥" />
+
+        <RadioButton
+            android:id="@+id/duYayaRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="度丫丫" />
+    </RadioGroup>
+
     <EditText
         android:id="@+id/textToSpeakEditText"
         android:layout_width="match_parent"

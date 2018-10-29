@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,6 +17,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((RadioGroup)findViewById(R.id.voiceTypeRadioGroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.maleVoiceRadioButton:
+                        break;
+                    case R.id.femaleVoiceRadioButton:
+                        break;
+                    case R.id.duXiaoyaoRadioButton:
+                        break;
+                    case R.id.duYayaRadioButton:
+                }
+            }
+        });
         findViewById(R.id.speakButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

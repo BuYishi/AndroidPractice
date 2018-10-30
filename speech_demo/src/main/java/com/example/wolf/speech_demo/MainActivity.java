@@ -17,18 +17,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((RadioGroup)findViewById(R.id.voiceTypeRadioGroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        ((RadioGroup) findViewById(R.id.voiceTypeRadioGroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int errorCode = 0;
                 switch (checkedId) {
                     case R.id.maleVoiceRadioButton:
+                        errorCode = baiduSpeechSynthesizer.switchVoice(BaiduSpeechSynthesizer.VoiceType.MALE_VOICE);
                         break;
                     case R.id.femaleVoiceRadioButton:
+                        errorCode = baiduSpeechSynthesizer.switchVoice(BaiduSpeechSynthesizer.VoiceType.FEMALE_VOICE);
                         break;
                     case R.id.duXiaoyaoRadioButton:
+                        errorCode = baiduSpeechSynthesizer.switchVoice(BaiduSpeechSynthesizer.VoiceType.DU_XIAO_YAO);
                         break;
                     case R.id.duYayaRadioButton:
+                        errorCode = baiduSpeechSynthesizer.switchVoice(BaiduSpeechSynthesizer.VoiceType.DU_YA_YA);
                 }
+                Log.d(TAG, "errorCode: " + errorCode);
             }
         });
         findViewById(R.id.speakButton).setOnClickListener(new View.OnClickListener() {

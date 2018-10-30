@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class BaiduSpeechSynthesizer {
+    private Context applicationContext;
     private SpeechSynthesizer speechSynthesizer;
     private String textModelFilename;
     private boolean initialized;
@@ -21,10 +22,11 @@ public class BaiduSpeechSynthesizer {
     private static final String APP_ID = "14580936";
     private static final String API_KEY = "KflRpME3kpB9s7srRCRrt4N1";
     private static final String SECRET_KEY = "UiWU6kwgPpNaqMsI1wpBQlTA6DtUGxHf";
-    private static final String SPEECH_MODEL_FILENAME_MALE_VOICE = "bd_etts_common_speech_m15_mand_eng_high_am-mix_v3.0.0_20170505.dat";
-    private static final String SPEECH_MODEL_FILENAME_FEMALE_VOICE = "bd_etts_common_speech_f7_mand_eng_high_am-mix_v3.0.0_20170512.dat";
-    private static final String SPEECH_MODEL_FILENAME_DU_XIAO_YAO = "bd_etts_common_speech_yyjw_mand_eng_high_am-mix_v3.0.0_20170512.dat";
-    private static final String SPEECH_MODEL_FILENAME_DU_YA_YA = "bd_etts_common_speech_as_mand_eng_high_am_v3.0.0_20170516.dat";
+    private static final String TEXT_MODEL_ASSET_FILENAME = "bd_etts_text.dat";
+    private static final String SPEECH_MODEL_ASSET_FILENAME_MALE_VOICE = "bd_etts_common_speech_m15_mand_eng_high_am-mix_v3.0.0_20170505.dat";
+    private static final String SPEECH_MODEL_ASSET_FILENAME_FEMALE_VOICE = "bd_etts_common_speech_f7_mand_eng_high_am-mix_v3.0.0_20170512.dat";
+    private static final String SPEECH_MODEL_ASSET_FILENAME_DU_XIAO_YAO = "bd_etts_common_speech_yyjw_mand_eng_high_am-mix_v3.0.0_20170512.dat";
+    private static final String SPEECH_MODEL_ASSET_FILENAME_DU_YA_YA = "bd_etts_common_speech_as_mand_eng_high_am_v3.0.0_20170516.dat";
     private static final String TAG = BaiduSpeechSynthesizer.class.getName();
 
     private BaiduSpeechSynthesizer() {
@@ -32,20 +34,15 @@ public class BaiduSpeechSynthesizer {
     }
 
     public void initialize(Context context) throws InitializationException {
-        speechSynthesizer.setContext(context);
+        applicationContext = context.getApplicationContext();
+        speechSynthesizer.setContext(applicationContext);
         speechSynthesizer.setAppId(APP_ID);
         speechSynthesizer.setApiKey(API_KEY, SECRET_KEY);
-        File ttsDir = new File(context.getFilesDir() + "/BaiduTTS");
-        if (!ttsDir.exists()) {
-            boolean success = ttsDir.mkdir();
-            Log.d(TAG, "success: " + success);
-        }
-//        String speechModelAssetFilename = "bd_etts_common_speech_m15_mand_eng_high_am-mix_v3.0.0_20170505.dat";
-        String speechModelFilename = ttsDir + "/" + SPEECH_MODEL_FILENAME_MALE_VOICE;
-        copyAssetFile(context, SPEECH_MODEL_FILENAME_MALE_VOICE, speechModelFilename);  //start here
-        String textModelAssetFilename = "bd_etts_text.dat";
-        textModelFilename = ttsDir + "/" + textModelAssetFilename;
-        copyAssetFile(context, textModelAssetFilename, textModelFilename);
+        File ttsDir = createTtsDir();
+        String speechModelFilename = ttsDir + "/" + SPEECH_MODEL_ASSET_FILENAME_MALE_VOICE;
+        copyAssetFile(SPEECH_MODEL_ASSET_FILENAME_MALE_VOICE, speechModelFilename);
+        textModelFilename = ttsDir + "/" + TEXT_MODEL_ASSET_FILENAME;
+        copyAssetFile(TEXT_MODEL_ASSET_FILENAME, textModelFilename);
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE, speechModelFilename);
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_TEXT_MODEL_FILE, textModelFilename);
         int errorCode = speechSynthesizer.initTts(TtsMode.MIX);
@@ -64,18 +61,23 @@ public class BaiduSpeechSynthesizer {
 
     public int switchVoice(VoiceType type) {
         String speechModelFilename = null;
+        File ttsDir = createTtsDir();
         switch (type) {
             case MALE_VOICE:
-                speechModelFilename = "bd_etts_common_speech_m15_mand_eng_high_am-mix_v3.0.0_20170505.dat";
+                speechModelFilename = ttsDir + "/" + SPEECH_MODEL_ASSET_FILENAME_MALE_VOICE;
+                copyAssetFile(SPEECH_MODEL_ASSET_FILENAME_MALE_VOICE, speechModelFilename);
                 break;
             case FEMALE_VOICE:
-                speechModelFilename = "bd_etts_common_speech_f7_mand_eng_high_am-mix_v3.0.0_20170512.dat";
+                speechModelFilename = ttsDir + "/" + SPEECH_MODEL_ASSET_FILENAME_FEMALE_VOICE;
+                copyAssetFile(SPEECH_MODEL_ASSET_FILENAME_FEMALE_VOICE, speechModelFilename);
                 break;
             case DU_XIAO_YAO:
-                speechModelFilename = "bd_etts_common_speech_yyjw_mand_eng_high_am-mix_v3.0.0_20170512.dat";
+                speechModelFilename = ttsDir + "/" + SPEECH_MODEL_ASSET_FILENAME_DU_XIAO_YAO;
+                copyAssetFile(SPEECH_MODEL_ASSET_FILENAME_DU_XIAO_YAO, speechModelFilename);
                 break;
             case DU_YA_YA:
-                speechModelFilename = "bd_etts_common_speech_as_mand_eng_high_am_v3.0.0_20170516.dat";
+                speechModelFilename = ttsDir + "/" + SPEECH_MODEL_ASSET_FILENAME_DU_YA_YA;
+                copyAssetFile(SPEECH_MODEL_ASSET_FILENAME_DU_YA_YA, speechModelFilename);
         }
         return speechSynthesizer.loadModel(speechModelFilename, textModelFilename);
     }
@@ -91,11 +93,20 @@ public class BaiduSpeechSynthesizer {
         return instance;
     }
 
-    private void copyAssetFile(Context context, String assetFilename, String destinationFilename) {
+    private File createTtsDir() {
+        File ttsDir = new File(applicationContext.getFilesDir() + "/BaiduTTS");
+        if (!ttsDir.exists()) {
+            boolean success = ttsDir.mkdir();
+            Log.d(TAG, "success: " + success);
+        }
+        return ttsDir;
+    }
+
+    private void copyAssetFile(String assetFilename, String destinationFilename) {
         File destinationFile = new File(destinationFilename);
         if (!destinationFile.exists()) {
             try (FileOutputStream outputStream = new FileOutputStream(destinationFilename)) {
-                AssetManager assetManager = context.getAssets();
+                AssetManager assetManager = applicationContext.getAssets();
                 InputStream inputStream = assetManager.open(assetFilename);
                 byte[] src = new byte[inputStream.available()];
                 inputStream.read(src);

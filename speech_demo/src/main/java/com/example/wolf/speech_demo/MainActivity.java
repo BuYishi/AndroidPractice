@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     int errorCode = baiduSpeechSynthesizer.speak(text);
                     Log.d(TAG, "errorCode: " + errorCode);
                 } else {
-                    Toast.makeText(MainActivity.this, "未初始化语音模块", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentContext, "未初始化语音模块", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(musicVolumeBroadcastReceiver, filter);
         try {
             baiduSpeechSynthesizer = BaiduSpeechSynthesizer.getInstance();
-            baiduSpeechSynthesizer.initialize(this);
+            baiduSpeechSynthesizer.initialize(currentContext);
         } catch (BaiduSpeechSynthesizer.InitializationException ex) {
             Log.e(TAG, "Error code: " + ex.getErrorCode(), ex);
-            Toast.makeText(this, "语音模块初始化异常，错误码：" + ex.getErrorCode(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(currentContext, "语音模块初始化异常，错误码：" + ex.getErrorCode(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -2,18 +2,22 @@ package com.example.wolf.speech_demo;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private Context currentContext = this;
     private EditText textToSpeakEditText;
+    private SeekBar volumeSeekBar;
     private BaiduSpeechSynthesizer baiduSpeechSynthesizer;
+    private AudioManager audioManager;
     private static final String TAG = MainActivity.class.getName();
 
     @Override
@@ -63,6 +67,25 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "未初始化语音模块", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        volumeSeekBar = findViewById(R.id.volumeSeekBar);
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        volumeSeekBar.setMax(maxVolume);
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d(TAG, "progress: " + progress);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_PLAY_SOUND);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
         textToSpeakEditText = findViewById(R.id.textToSpeakEditText);

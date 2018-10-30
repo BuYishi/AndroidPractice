@@ -2,6 +2,7 @@ package com.example.wolf.speech_demo;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,12 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar volumeSeekBar;
     private BaiduSpeechSynthesizer baiduSpeechSynthesizer;
     private AudioManager audioManager;
+    private MusicVolumeBroadcastReceiver musicVolumeBroadcastReceiver = new MusicVolumeBroadcastReceiver() {
+        @Override
+        public void onVolumeChanged(int index) {
+            volumeSeekBar.setProgress(index);
+        }
+    };
     private static final String TAG = MainActivity.class.getName();
 
     @Override
@@ -99,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         textToSpeakEditText = findViewById(R.id.textToSpeakEditText);
+        IntentFilter filter = new IntentFilter(MusicVolumeBroadcastReceiver.ACTION_VOLUME_CHANGED);
+        registerReceiver(musicVolumeBroadcastReceiver, filter);
         try {
             baiduSpeechSynthesizer = BaiduSpeechSynthesizer.getInstance();
             baiduSpeechSynthesizer.initialize(this);
@@ -111,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(musicVolumeBroadcastReceiver);
         int releaseErrorCode = baiduSpeechSynthesizer.release();
         Log.d(TAG, "releaseErrorCode: " + releaseErrorCode);
     }

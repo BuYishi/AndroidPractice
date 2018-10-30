@@ -14,3 +14,5 @@
 &emsp;&emsp;RecyclerView演示
 ## speech_demo ##
 &emsp;&emsp;百度TTS演示
+## baidu\_asr_demo ##
+&emsp;&emsp;百度ASR演示

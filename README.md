@@ -16,3 +16,5 @@
 &emsp;&emsp;百度TTS演示
 ## baidu\_asr_demo ##
 &emsp;&emsp;百度ASR演示
+## status\_bar\_color_demo ##
+&emsp;&emsp;设置状态栏颜色的演示

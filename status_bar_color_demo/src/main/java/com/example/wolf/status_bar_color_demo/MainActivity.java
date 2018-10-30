@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, StatusBarColorDemo1Activity.class));
                 break;
             case R.id.settingMethod2Button:
+                startActivity(new Intent(this, StatusBarColorDemo2Activity.class));
         }
     }
 }

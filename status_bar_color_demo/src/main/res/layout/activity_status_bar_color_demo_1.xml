@@ -14,5 +14,5 @@
         android:text="Status Bar Color Demo 1"
         android:textColor="@android:color/white" />
 
-    <include  layout="@layout/common_buttons" />
+    <include layout="@layout/common_buttons" />
 </LinearLayout>

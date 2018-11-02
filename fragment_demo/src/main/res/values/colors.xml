@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorTitleBar">#1C1B20</color>
+    <color name="colorSelectedTab">#1AAD19</color>
+    <color name="colorUnselectedTab">#F9F5F2</color>
+</resources>

@@ -18,3 +18,5 @@
 &emsp;&emsp;百度ASR演示
 ## status\_bar\_color_demo ##
 &emsp;&emsp;设置状态栏颜色的演示
+## fragment_demo ##
+&emsp;&emsp;Fragment演示，模仿微信主界面

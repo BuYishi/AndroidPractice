@@ -1,4 +1,4 @@
-package com.tiaze.fragmentdemo;
+package com.tiaze.fragment_demo;
 
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;

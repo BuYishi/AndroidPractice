@@ -1,4 +1,4 @@
-package com.tiaze.fragmentdemo;
+package com.tiaze.fragment_demo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

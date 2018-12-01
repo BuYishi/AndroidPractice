@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/speech_demo" />
             <option value="$PROJECT_DIR$/status_bar_color_demo" />
             <option value="$PROJECT_DIR$/view_pager_demo" />
+            <option value="$PROJECT_DIR$/web_view_demo" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

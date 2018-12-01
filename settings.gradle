@@ -1,1 +1,1 @@
-include ':view_pager_demo', ':exit_demo', ':camera_demo', ':retrofit_demo', ':recycler_view_demo', ':speech_demo', ':baidu_asr_demo', ':status_bar_color_demo', ':fragment_demo'
+include ':view_pager_demo', ':exit_demo', ':camera_demo', ':retrofit_demo', ':recycler_view_demo', ':speech_demo', ':baidu_asr_demo', ':status_bar_color_demo', ':fragment_demo', ':web_view_demo'

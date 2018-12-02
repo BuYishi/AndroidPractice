@@ -51,12 +51,10 @@ public class BaiduSpeechSynthesizer {
         initialized = true;
     }
 
-    public boolean isInitialized() {
-        return initialized;
-    }
-
-    public int speak(String text) {
-        return speechSynthesizer.speak(text);
+    public int speak(String text) throws UninitializedException {
+        if (initialized)
+            return speechSynthesizer.speak(text);
+        throw new UninitializedException("TTS uninitialized");
     }
 
     public int switchVoice(VoiceType type) {
@@ -127,6 +125,12 @@ public class BaiduSpeechSynthesizer {
 
         public int getErrorCode() {
             return errorCode;
+        }
+    }
+
+    public class UninitializedException extends Exception {
+        private UninitializedException(String message) {
+            super(message);
         }
     }
 

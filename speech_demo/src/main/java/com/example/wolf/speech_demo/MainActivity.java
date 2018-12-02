@@ -73,14 +73,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.speakButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (baiduSpeechSynthesizer.isInitialized()) {
+                try {
                     String text = textToSpeakEditText.getText().toString();
                     if (text.isEmpty())
                         text = "百度语音演示";
                     int errorCode = baiduSpeechSynthesizer.speak(text);
                     Log.d(TAG, "errorCode: " + errorCode);
-                } else {
-                    Toast.makeText(currentContext, "未初始化语音模块", Toast.LENGTH_SHORT).show();
+                } catch (BaiduSpeechSynthesizer.UninitializedException ex) {
+                    Log.e(TAG, null, ex);
+                    Toast.makeText(currentContext, "语音模块未初始化", Toast.LENGTH_SHORT).show();
                 }
             }
         });

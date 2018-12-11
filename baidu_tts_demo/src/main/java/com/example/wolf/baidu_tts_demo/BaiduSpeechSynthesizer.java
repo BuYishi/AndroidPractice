@@ -1,4 +1,4 @@
-package com.example.wolf.speech_demo;
+package com.example.wolf.baidu_tts_demo;
 
 import android.content.Context;
 import android.content.res.AssetManager;

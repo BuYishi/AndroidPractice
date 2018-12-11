@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.wolf.speech_demo">
+    package="com.example.wolf.baidu_tts_demo">
 
     <uses-permission android:name="android.permission.INTERNET" />  <!--需联网初始化认证语音模块-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />  <!--必要的，否则会引起应用崩溃-->
@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.wolf.baidu_tts_demo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

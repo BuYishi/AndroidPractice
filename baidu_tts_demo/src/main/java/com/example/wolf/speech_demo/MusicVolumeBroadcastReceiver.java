@@ -1,4 +1,4 @@
-package com.example.wolf.baidu_tts_demo;
+package com.example.wolf.speech_demo;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

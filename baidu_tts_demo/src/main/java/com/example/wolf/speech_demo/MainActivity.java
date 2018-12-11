@@ -1,4 +1,4 @@
-package com.example.wolf.baidu_tts_demo;
+package com.example.wolf.speech_demo;
 
 import android.app.ProgressDialog;
 import android.content.Context;

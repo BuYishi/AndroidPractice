@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.wolf.baidu_tts_demo"
+        applicationId "com.example.wolf.speech_demo"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
